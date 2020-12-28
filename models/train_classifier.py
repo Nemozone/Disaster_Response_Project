@@ -42,8 +42,8 @@ class StartingVerbExtractor(BaseEstimator, TransformerMixin):
 
 def load_data(database_filepath):
     # load data from database
-    engine = create_engine(database_filepath)
-    df = pd.read_sql_table('InsertDatabaseName', engine)
+    engine = create_engine('sqlite:///'+ str(database_filepath))
+    df = pd.read_sql_table('DisasterResponse.db', engine)
 
     # Assign message column as inputs and category columns as targets
     X = df.message.values
@@ -78,20 +78,20 @@ def build_model():
 
         ('clf', MultiOutputClassifier(DecisionTreeClassifier()))
     ])
-    
+    return pipeline
 
 
 def evaluate_model(model, X_test, Y_test, category_names):
     
-    model.fit(X_train, Y_train)
+    
     predicted = model.predict(X_test)
     y_test_df = pd.DataFrame(Y_test, columns=category_names)
     predicted_df = pd.DataFrame(predicted, columns = category_names)
     
-    print(classification_report(y_test_df, predicted_df, target_names= category_names, zero_division=1))
+    print(classification_report(y_test_df, predicted_df, target_names= category_names))
 
 def save_model(model, model_filepath):
-    with open(model_filepath, 'wb') as file:
+    with open(str(model_filepath), 'wb') as file:
         pickle.dump(model, file)
 
 
