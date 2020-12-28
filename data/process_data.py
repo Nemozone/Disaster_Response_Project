@@ -8,13 +8,6 @@ def load_data(messages_filepath, categories_filepath):
     messages = pd.read_csv(messages_filepath)
     categories = pd.read_csv(categories_filepath)
     df = messages.merge(categories, how='outer', on=['id'])
-    
-    
-    
-
-
-def clean_data(df):
-    
     # change category dataset format to a dummy-var like shape:
     categories = categories['categories'].str.split(';', expand=True)
     row = categories.loc[0,:]
@@ -36,15 +29,20 @@ def clean_data(df):
     # replace categories column in df with new category columns.
     df.drop('categories', axis=1, inplace=True)
     df = pd.concat([df, categories], axis=1, sort=False)
-    df.dropna(inplace=True)
     
+    return df
+    
+
+
+def clean_data(df):
+    df.dropna(inplace=True)     
     #Remove duplicates
     df = df.drop_duplicates()
 
 
 def save_data(df, database_filepath):
     engine = create_engine(database_filepath)
-    df.to_sql('InsertDatabaseName', engine, if_exists='replace', index=False)  
+    df.to_sql('DisasterResponse.db', engine, if_exists='replace', index=False)  
 
 
 def main():
