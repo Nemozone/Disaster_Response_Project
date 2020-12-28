@@ -38,10 +38,11 @@ def clean_data(df):
     df.dropna(inplace=True)     
     #Remove duplicates
     df = df.drop_duplicates()
+    return df
 
 
 def save_data(df, database_filepath):
-    engine = create_engine(database_filepath)
+    engine = create_engine('sqlite:///'+ str(database_filepath))
     df.to_sql('DisasterResponse.db', engine, if_exists='replace', index=False)  
 
 
