@@ -4,7 +4,18 @@ import pandas as pd
 from sqlalchemy import create_engine
 
 def load_data(messages_filepath, categories_filepath):
+    """
+    Loads the data from csv files, transforms and 
+    concatenates into a single dataframe
     
+    Parameters:
+        messages_filepath (str): filepath for the 'messages' csv file
+        categories_filepath (str): filepath for the 'categories' csv file
+    
+    Returns:
+        df (pandas DataFrame): Returning DataFrame 
+    
+    """
     messages = pd.read_csv(messages_filepath)
     categories = pd.read_csv(categories_filepath)
     df = messages.merge(categories, how='outer', on=['id'])
@@ -35,6 +46,16 @@ def load_data(messages_filepath, categories_filepath):
 
 
 def clean_data(df):
+    """
+    Returns the cleaned data frame with no missing or duplicated values
+    
+    Paramenters:
+        df (pandas DataFrame): The returned data frame from load_data()
+    
+    Returns:
+        df (pandas DataFrame): cleaned data
+    
+    """
     df.dropna(inplace=True)     
     #Remove duplicates
     df = df.drop_duplicates()
@@ -42,11 +63,34 @@ def clean_data(df):
 
 
 def save_data(df, database_filepath):
+    """
+    Loads data into a salite database
+    
+    Paramenters:
+        df (pandas DataFrame): The returned data frame from load_data()
+        database_filepath (str): the file path for the database file to be restored
+    
+    Returns:
+        Nothing
+    
+    """
     engine = create_engine('sqlite:///'+ str(database_filepath))
     df.to_sql('DisasterResponse.db', engine, if_exists='replace', index=False)  
 
 
 def main():
+    """
+    Executes all the processing by running all the functions and saves the 
+    cleaned data into the adressed database
+    
+    Paramenters:
+        No arguments
+    
+    Returns:
+        Nothing
+    
+    """
+
     if len(sys.argv) == 4:
 
         messages_filepath, categories_filepath, database_filepath = sys.argv[1:]
