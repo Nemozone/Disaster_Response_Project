@@ -145,7 +145,7 @@ def build_model():
     
     # now we can perform another grid search on this new estimator to be sure we have the best parameters
     parameters = {
-        'Features__text_pipeline__vect__max_df': [0.5,1.0],
+        #'Features__text_pipeline__vect__max_df': [0.5,1.0],
         'Features__text_pipeline__tfidf__smooth_idf': (True, False)    
     }
 
