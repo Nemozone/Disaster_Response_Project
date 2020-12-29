@@ -91,8 +91,8 @@ def load_data(database_filepath):
 
     # Assign message column as inputs and category columns as targets
     X = df.message.values
-    Y = df.iloc[:,4:].values
-    category_names = df.iloc[:,4:].columns
+    Y = df.iloc[:,3:].values
+    category_names = df.iloc[:,3:].columns
     
     return X,Y,category_names
 

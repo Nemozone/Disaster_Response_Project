@@ -34,9 +34,7 @@ def load_data(messages_filepath, categories_filepath):
     # replace any non binary values:
     categories.replace(2,1,inplace=True)
     
-    # drop all the missing values:
-    df.dropna(inplace=True)
-   
+       
     # replace categories column in df with new category columns.
     df.drop('categories', axis=1, inplace=True)
     df = pd.concat([df, categories], axis=1, sort=False)
@@ -56,7 +54,17 @@ def clean_data(df):
         df (pandas DataFrame): cleaned data
     
     """
-    df.dropna(inplace=True)     
+    df.drop('original',axis=1, inplace=True)
+    df.dropna(inplace=True)
+    category_colnames = ['related','request','offer','aid_related','medical_help',
+                         'medical_products', 'search_and_rescue','security', 'military','child_alone',
+                         'water','food','shelter','clothing','money',
+                         'missing_people','refugees','death','other_aid','infrastructure_related',
+                         'transport', 'buildings', 'electricity', 'tools', 'hospitals',
+                         'shops', 'aid_centers', 'other_infrastructure', 'weather_related', 'floods',
+                         'storm', 'fire', 'earthquake', 'cold', 'other_weather', 'direct_report'
+                         ]
+    df[category_colnames] = df[category_colnames].astype(int)    
     #Remove duplicates
     df = df.drop_duplicates()
     return df
